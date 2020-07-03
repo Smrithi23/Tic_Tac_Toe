@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 mongoose.connect(
-  "mongodb+srv://trickytactoe:amps@engage2020@cluster0.gho9z.mongodb.net/tricky-tac-toe?retryWrites=true&w=majority",
+  "mongodb+srv://trickytactoe:<password>@cluster0.gho9z.mongodb.net/<dbname>?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useCreateIndex: true,
