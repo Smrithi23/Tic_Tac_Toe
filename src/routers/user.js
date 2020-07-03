@@ -3,9 +3,14 @@ const hbs = require("hbs");
 const User = require("../models/user");
 const router = new express.Router();
 
+//home
+router.get('', (req, res) => {
+  res.render('index')
+})
+
 //Registration page
 router.get("/register", async (req, res) => {
-  res.status(200).render("");
+  res.status(200).render('register');
 });
 
 //User registration
@@ -22,7 +27,7 @@ router.post("/register", async (req, res) => {
 
 //Login page
 router.get("/login", async (req, res) => {
-  res.status(200).render("");
+  res.status(200).render("login");
 });
 
 //User login
@@ -41,11 +46,15 @@ router.post("/login", async (req, res) => {
   }
 });
 
+//profile page
+router.get('/profile', async (req, res) => {
+  res.status(200).render('profile')
+})
+
 //Dashboard
 router.get("/dashboard", async (req, res) => {
   try {
-    const user = req.user;
-    res.render("", { user });
+    res.status(200).render("dashboard");
   } catch (e) {
     res.status(500).send();
   }
@@ -56,7 +65,7 @@ router.get("/leaderboard", async (req, res) => {
   try {
     const user = await User.find({}, { username: 1, highscore: 1, _id: 0 });
     let sortedscore = user.slice().sort((a, b) => b.highscore - a.highscore);
-    res.send(sortedscore);
+    res.send('leaderboard',sortedscore);
   } catch (e) {
     res.status(500).send(e);
   }
