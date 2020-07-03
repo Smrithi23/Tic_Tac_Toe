@@ -4,13 +4,13 @@ const User = require("../models/user");
 const router = new express.Router();
 
 //home
-router.get('', (req, res) => {
-  res.render('index')
-})
+router.get("", (req, res) => {
+  res.render("index");
+});
 
 //Registration page
 router.get("/register", async (req, res) => {
-  res.status(200).render('register');
+  res.status(200).render("register");
 });
 
 //User registration
@@ -47,9 +47,9 @@ router.post("/login", async (req, res) => {
 });
 
 //profile page
-router.get('/profile', async (req, res) => {
-  res.status(200).render('profile')
-})
+router.get("/profile", async (req, res) => {
+  res.status(200).render("profile");
+});
 
 //Dashboard
 router.get("/dashboard", async (req, res) => {
@@ -65,7 +65,7 @@ router.get("/leaderboard", async (req, res) => {
   try {
     const user = await User.find({}, { username: 1, highscore: 1, _id: 0 });
     let sortedscore = user.slice().sort((a, b) => b.highscore - a.highscore);
-    res.send('leaderboard',sortedscore);
+    res.send("leaderboard", sortedscore);
   } catch (e) {
     res.status(500).send(e);
   }
