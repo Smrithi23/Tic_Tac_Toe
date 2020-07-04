@@ -34,19 +34,6 @@ let player = ['X', 'O'];
 let currentPlayer = player[0];
 let winner = null;
 
-function findBox(e) {
-    let x = e.clientX;
-    let y = e.clientY;
-    console.log("x = ", x, "y = ", y);
-    console.log("window width = ", window.innerWidth, "canvas width = ", canvas.width, (window.innerWidth - canvas.width) / 2);  
-    if(x >= (window.innerWidth - canvas.width) / 2) {
-        
-    }
-    if(y >= (window.innerHeight - canvas.height) / 2) {
-        
-    }
-}
-
 function draw() {
     for (let j = 0; j < 3; j++) {
         for(let i = 0; i < 3; i++) {
@@ -54,7 +41,6 @@ function draw() {
             let y = h * j + h / 2;
             let xr = w / 10;
             if(board[i][j] == player[0]) {
-                ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.moveTo(x-xr, y-xr);
                 ctx.lineTo(x+xr, y+xr);
@@ -64,7 +50,6 @@ function draw() {
                 ctx.lineTo(x-xr, y+xr);
                 ctx.stroke();
             } else if (board[i][j] == player[1]) {
-                ctx.lineWidth = 2;
                 ctx.beginPath();
                 ctx.arc(x, y, 10, 0, 2 * Math.PI);
                 ctx.stroke();
@@ -111,17 +96,20 @@ function checkWinner() {
     }
 }
 
-function nextTurn() {
+function nextTurn(e) {
     console.log(available);
     if(available.length == 0 || winner != null) {
         console.log(winner);
-        console.log("Game Over!!!")
+        console.log("Game Over!!!");
     } else {
-        let index = Math.floor(available.length * Math.random());
-        let spot = available.splice(index, 1)[0];
-        console.log(available);
-        let i = spot[0];
-        let j = spot[1];
+        let rect = canvas.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let y = e.clientY - rect.top;
+        let i = Math.floor(x / ((rect.right - rect.left) / 3));
+        let j = Math.floor(y / ((rect.right - rect.left) / 3));
+        console.log(i, j);
+        let index = available.indexOf([i, j]);
+        available.splice(index, 1)
         board[i][j] = currentPlayer;
         draw();
         checkWinner();
@@ -133,7 +121,6 @@ function nextTurn() {
     }
 }
 
-document.querySelector('body').addEventListener('click', function (e) {
-    findBox(e);
-    nextTurn();
+document.querySelector('canvas').addEventListener('click', function (e) {
+    nextTurn(e);
 });
