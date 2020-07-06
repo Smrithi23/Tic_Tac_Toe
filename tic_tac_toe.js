@@ -16,12 +16,14 @@ let h = canvas.height / 3;
 let player = ['X', 'O'];
 let scores = [0, 0]
 let moves = [0, 0]
-let currentPlayerIndex = 0
+let startingPlayer = 0
+let currentPlayerIndex = 1
 let currentPlayer = player[currentPlayerIndex];
 let winner = null;
 
-const drawCtx = () => {
 
+//draw grid
+const drawCtx = () => {
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(w, 0);
@@ -41,6 +43,7 @@ const drawCtx = () => {
     ctx.stroke();
 }
 
+//draw x-o 
 const draw = () => {
     for (let j = 0; j < 3; j++) {
         for (let i = 0; i < 3; i++) {
@@ -71,7 +74,7 @@ const updateScore = (winner) => {
         scores[0] += (6 - moves[currentPlayerIndex]) * 10
     else if (winner === 'O')
         scores[1] += (6 - moves[currentPlayerIndex]) * 10
-    console.log(scores)
+    // console.log(scores)
 }
 
 const checkWinner = () => {
@@ -80,7 +83,7 @@ const checkWinner = () => {
     for (let i = 0; i < 3; i++) {
         if (board[i][0] === board[i][1] && board[i][1] === board[i][2] && board[i][0] != '') {
             winner = board[i][0];
-            console.log('Winner is ', winner);
+            // console.log('Winner is ', winner);
             updateScore(winner)
             return
         }
@@ -90,7 +93,7 @@ const checkWinner = () => {
     for (let i = 0; i < 3; i++) {
         if (board[0][i] === board[1][i] && board[1][i] === board[2][i] && board[0][i] != '') {
             winner = board[0][i];
-            console.log('Winner is ', winner);
+            // console.log('Winner is ', winner);
             updateScore(winner)
             return
         }
@@ -99,34 +102,34 @@ const checkWinner = () => {
     // diagonal
     if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[0][0] != '') {
         winner = board[0][0];
-        console.log('Winner is ', winner);
+        // console.log('Winner is ', winner);
         updateScore(winner)
         return
     }
 
     if (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[0][2] != '') {
         winner = board[0][2];
-        console.log('Winner is ', winner);
+        // console.log('Winner is ', winner);
         updateScore(winner)
         return
     }
 
     if (winner == null && available.length == 0) {
-        console.log('tie');
+        // console.log('tie');
     } 
 }
 
 const nextTurn = (e) => {
     if (winner != null) {
-        console.log(winner);
-        console.log("Game Over!!!");
+        // console.log(winner);
+        // console.log("Game Over!!!");
     } else {
         let rect = canvas.getBoundingClientRect();
         let x = e.clientX - rect.left;
         let y = e.clientY - rect.top;
         let i = Math.floor(x / ((rect.right - rect.left) / 3));
         let j = Math.floor(y / ((rect.right - rect.left) / 3));
-        console.log(i, j);
+        // console.log(i, j);
 
         let indx = 0
 
@@ -162,7 +165,13 @@ const init = () => {
     vacant = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     drawCtx()
     moves = [0, 0]
-    currentPlayerIndex = (currentPlayerIndex == 0) ? 1 : 0
+    if(winner === null){
+        currentPlayerIndex = (currentPlayerIndex === 0) ? 1 : 0
+        console.log(currentPlayerIndex)    
+    } else {
+        startingPlayer = (startingPlayer === 0) ? 1 : 0
+        currentPlayerIndex = startingPlayer
+    }
     currentPlayer = player[currentPlayerIndex];
     winner = null;
     document.querySelector('canvas').addEventListener('click', function (e) {
