@@ -60,7 +60,7 @@ router.get("/profile", auth, async (req, res) => {
 });
 
 //Leaderboard - sends usernames and scores in descending order
-router.get("/profile/leaderboard",auth, async (req, res) => {
+router.get("/profile/leaderboard", async (req, res) => {
   try {
     const user = await User.find({}, { username: 1, highscore: 1, _id: 0 });
     let sortedscore = user.slice().sort((a, b) => b.highscore - a.highscore);
@@ -93,6 +93,14 @@ router.patch('/profile',auth, async (req, res) => {
 router.get("/dashboard", async (req, res) => {
   try {
     res.status(200).render("dashboard");
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+
+router.get("/game", async(req, res) => {
+  try {
+    res.status(200).render("game");
   } catch (e) {
     res.status(500).send();
   }
