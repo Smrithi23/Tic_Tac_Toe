@@ -1,13 +1,14 @@
 <html>
 <head>
-<title>Login and Registration</title>
+<title>Tricky Tac Toe</title>
 <link rel="stylesheet" href="style.css">
 <style>
-    body{
+body{
 	height: 100vh;
 	background-size: cover;
 	background-position: center;
-	background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('pic1.jpg');
+	background: linear-gradient(-90deg, #00c9ff, #92fe9d);
+	font-family: 'Montserrat', sans-serif;
 }
 .login-page{
 	width: 360px;
@@ -17,7 +18,8 @@
 .form {
 	position: relative;
 	z-index: 1;
-	background: rgba(7,40,195,0.8);
+	background: #FFF;
+	border: 1px solid #CCC;
 	max-width: 360px;
 	margin: 0 auto 100px;
 	padding: 45px;
@@ -26,19 +28,32 @@
 .form input{
 	font-family: "Robotto", sans-serif;
 	outline: 1;
-	background: #f2f2f2;
+	background: #EEE;
+	border: 1px solid #CCC;
 	width: 100%;
-	border: 0;
 	margin: 0 0 15px;
 	padding: 15px;
 	box-sizing: border-box;
 	font-size: 14px;
+	color: #555;
 }
-.form button{
+#login{
 	font-family: "Robotto", sans-serif;
 	text-transform: uppercase;
 	outline: 0;
-	background: #4CAF50;
+	background: rgb(18, 190, 23);
+	width: 100%;
+	padding: 15px;
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+}
+#link{
+	font-family: "Robotto", sans-serif;
+	text-transform: uppercase;
+	outline: 0;
+	background: rgb(245, 153, 6);
 	width: 100%;
 	border: 0;
 	padding: 15px;
@@ -48,9 +63,6 @@
 	cursor: pointer;
 }
 
-.form button:hover,.form button:active{
-	background: #43A047;
-}
 .form .message{
 	font-family: "Robotto", sans-serif;
 	margin: 15px 0 0;
@@ -62,35 +74,33 @@
 	text-decoration: none;
 	font-weight: bold;
 }
-.form .register-form{
-	display: none;
+#login-error-message {
+	color: #777;
+	font-weight: bold;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 1em;
 }
 </style>
 </head>
 <body>
 <div class="login-page">
 	<div class="form">
-		<form class="register-form" action="/register" method="post">
+		{{#if loginerror}}
+		<div id="login-error-message">
+			{{loginerror}}
+		</div>
+		{{/if}}
+		<form class="login-form" method="post" action="/">
 			<input type="text" placeholder="Username" name="username" required/>
-			<input type="text" placeholder="email id" name="email" required/>
-			<input type="text" placeholder="password" name="password" required/>
-			<input type="submit" value="Register">
-			<p class="message"> Already Registered? <a href="#">Login</a></p>
+			<input type="password" placeholder="Password" name="password" required/>
+			<input id="login" type="submit" value="Login">
 		</form>
-		<form class="login-form" action="/login" method="POST">
-			<input type="text" placeholder="user name"/>
-			<input type="password" placeholder="password"/>
-			<button>login</button>
-		<p class="message">Not Registered? <a href="#">Register</a></p>
+		<form method="get" action="/register">
+			<input id="link" type="submit" value="Not Registered? Register">
 		</form>
 	</div>
 </div>
-<script src='https://code.jquery.com/jquery-3.5.1.min.js'></script>
-<script>
-$('.message a').click(function(){
-$('form').animate({height: "toggle", opacity: "toggle"}, "slow");
-});
-</script>
-
 </body>
 </html>

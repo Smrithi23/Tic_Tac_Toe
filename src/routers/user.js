@@ -4,6 +4,42 @@ const User = require("../models/user");
 const auth = require('../middleware/auth')
 
 const router = new express.Router();
+router.use(express.urlencoded())
+
+const Cookies = require("cookies");
+
+//Registration page
+router.get("/register", async (req, res) => {
+  res.status(200).render('register');
+});
+
+//User registration
+router.post("/register", async (req, res) => {
+  try {
+    const user = new User(req.body);
+    console.log(req.body.username);
+    console.log(req.body.email);
+    console.log(req.body.password);
+    await user.save();
+    const token = await user.generateAuthToken()
+    var cookies = new Cookies(req, res)
+    cookies.set('token', token)
+    res.status(200).render('dashboard', { username : user["username"], email : user["email"], highscore : user["highscore"] });
+  } catch (e) {
+    console.log(e)
+    let passworderror, emailerror, register_message;
+    if(e.errors.password) {
+      passworderror = "Password must be atleast 8 characters long";
+    }
+    if(e.errors.email) {
+      emailerror = "Invalid Email";
+    }
+    if (e.code === 11000 && e.password == null && e.email == null) {
+      register_message = "Already Registered"
+    }
+    res.status(400).render('register', { passworderror, emailerror, register_message })
+  }
+});
 
 //Login page
 router.get("/", async (req, res) => {
@@ -13,60 +49,39 @@ router.get("/", async (req, res) => {
 //User login
 router.post("/", async (req, res) => {
   try {
+    console.log(req.body);
     const user = await User.findByCredentials(
       req.body.username,
       req.body.password
     );
     const token = await user.generateAuthToken();
-    res.send({ user, token });
+    var cookies = new Cookies(req, res)
+    cookies.set('token', token)
+    res.status(200).render('dashboard', { username : user["username"], email : user["email"], highscore : user["highscore"] });
   } catch (e) {
-    res.status(400).send();
+    const loginerror = "Incorrect email or password"
+    res.status(400).redirect('login', { loginerror })
   }
 });
 
-router.post('/profile/logout', auth, async (req, res) => {
+router.post('/logout', auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
-      return token.token !== req.token
+      return token.token !== req.token;
     })
     await req.user.save()
-    res.send()
+    res.status(201).render('login');
   } catch (e) {
-    res.status(500).send(e)
+    res.status(500).send(e);
   }
 })
 
-//Registration page
-router.get("/register", async (req, res) => {
-  res.status(200).render("register");
-});
-
-//User registration
-router.post("/register", async (req, res) => {
-  const user = new User(req.body);
-  console.log(req.body.username);
-  console.log(req.body.email);
-  console.log(req.body.password);
-  try {
-    await user.save();
-    const token = await user.generateAuthToken()
-    res.status(201).send({ user, token });
-  } catch (e) {
-    res.status(400).send(e);
-  }
-});
-
-//profile page
-router.get("/profile", auth, async (req, res) => {
-  res.status(200).render("profile",{user: req.user});
-});
-
 //Leaderboard - sends usernames and scores in descending order
-router.get("/profile/leaderboard", async (req, res) => {
+router.get("/leaderboard", auth, async (req, res) => {
   try {
     const user = await User.find({}, { username: 1, highscore: 1, _id: 0 });
-    let sortedscore = user.slice().sort((a, b) => b.highscore - a.highscore);
-    res.status(200).render('leaderboard', sortedscore);
+    let leaderboard = user.slice().sort((a, b) => b.highscore - a.highscore);
+    res.status(200).render('leaderboard', { leaderboard });
   } catch (e) {
     res.status(500).send(e);
   }
@@ -74,8 +89,7 @@ router.get("/profile/leaderboard", async (req, res) => {
 
 
 //update highscore
-
-router.patch('/profile',auth, async (req, res) => {
+router.patch('/updatehighscore',auth, async (req, res) => {
   try {
     const score = req.body.score
     if (score > req.user.highscore) {
@@ -92,7 +106,7 @@ router.patch('/profile',auth, async (req, res) => {
 
 
 //Dashboard
-router.get("/dashboard", async (req, res) => {
+router.get("/dashboard", auth, async (req, res) => {
   try {
     res.status(200).render("dashboard");
   } catch (e) {
@@ -100,7 +114,7 @@ router.get("/dashboard", async (req, res) => {
   }
 });
 
-router.get("/game", async(req, res) => {
+router.get("/game", auth, async(req, res) => {
   try {
     res.status(200).render("game");
   } catch (e) {

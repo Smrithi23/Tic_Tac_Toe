@@ -3,9 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tricky Tac Toe</title>
+    <style>
+        *{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			box-sizing: border-box;
+			font-family: 'Montserrat', sans-serif;
+		}
+
+		body{
+			background: linear-gradient(-90deg, #00c9ff, #92fe9d);
+			font-family: 'Montserrat', sans-serif;
+            color: #777;
+            font-weight: bold;
+            font-size: 1.2em;
+		}
+        #leader-board-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #card {
+            background: #FFFFFF;
+            border: 1px solid #CCC;
+            padding: 2em;
+            width: 80%;
+            min-width: 15em;
+            max-width: 40em;
+        }
+        .info {
+            margin: 1em;
+        }
+        .button {
+            background-color: rgb(255, 145, 0);
+            border: 0;
+            padding: 1em;
+            color: #FFFFFF;
+            width: 100%;
+            font-weight: bold;
+            font-size: 1em;
+        }
+        #logout {
+			background: rgb(255, 145, 0);
+			border: 0;
+			color: #FFFFFF;
+            font-weight: bold;
+            font-size: 1em;
+            padding: 0.5em;
+            margin: 1em;
+		}
+        #header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+    </style>
 </head>
 <body>
-    {{user}}
+    <div id="header">
+        <form method="post" action="/logout">
+            <input id="logout" type="submit" value="Logout">
+        </form>
+    </div>
+    <div id="leader-board-card">
+        <div id="card">
+            <div class="info" style="text-align: center;">
+                Hi {{username}}!
+            </div>
+            <div class="info" style="text-align: center;">
+                {{email}}
+            </div>
+            <div class="info" style="text-align: center;">
+                High Score : {{highscore}}
+            </div>
+            <div class="info">
+                <form method="get" action="/leaderboard">
+                    <input class="button" type="submit" value="View Leaderboard">
+                </form>
+            </div>
+            <div class="info">
+                <form method="get" action="/game">
+                    <input class="button" type="submit" value="Play Tic-Tac-Toe">
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
