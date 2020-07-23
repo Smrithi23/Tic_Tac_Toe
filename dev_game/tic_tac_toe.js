@@ -105,18 +105,26 @@ const checkWinner = () => {
         // console.log('Winner is ', winner);
         //updateScore(winner)
     }
+    let check_tie = 0;
+    for(let i=0; i<3; i++) {
+        for(let j=0; j<3; j++) {
+            if(board[i][j] == human || board[i][j] == ai) {
+                check_tie++;
+            }
+        }
+    }
 
-    if (winner == null && available.length == 0) {
-        winner = 'tie'
+    if (check_tie == 9) {
+        winner = 'tie';
     }
     return winner;
 }
 
 let scores = {
-    'X': 1  ,
-    'O': -1,
+    'X': -1,
+    'O': 1,
     'tie': 0
-};  
+};
 
 function minimax(board, depth, isMaximizing) {
     let result = checkWinner();
@@ -124,7 +132,7 @@ function minimax(board, depth, isMaximizing) {
         return scores[result];
     }
     if(isMaximizing) {
-        let bestScore = Number.NEGATIVE_INFINITY;
+        let bestScore = -1 * Infinity;
         for(let i = 0; i < 3; i++) {
             for(let j = 0; j < 3; j++) {
                 if(board[i][j] == '') {
@@ -139,7 +147,7 @@ function minimax(board, depth, isMaximizing) {
         }
         return bestScore;
     } else {
-        let bestScore = Number.POSITIVE_INFINITY;
+        let bestScore = Infinity;
         for(let i = 0; i < 3; i++) {
             for(let j = 0; j < 3; j++) {
                 if(board[i][j] == '') {
@@ -157,7 +165,7 @@ function minimax(board, depth, isMaximizing) {
 }
 
 function bestMove() {
-    let bestScore = Number.NEGATIVE_INFINITY;
+    let bestScore = -1 * Infinity;
     let move;
     for(let i = 0; i < 3; i++) {
         for(let j = 0; j < 3; j++) { 
@@ -173,6 +181,14 @@ function bestMove() {
         }
     }
     board[move.i][move.j] = ai;
+    available.forEach((e) => {
+        if (e[0] === move.i && e[1] === move.j) {
+            indx = parseInt(available.indexOf(e))
+        }
+    })
+    if (vacant[indx] === 0) {
+        vacant[indx] = 1
+    }
 }
 
 const nextTurn = (e) => {
@@ -196,7 +212,7 @@ const nextTurn = (e) => {
         })
         if (vacant[indx] === 0) {
             vacant[indx] = 1
-            moves[human]++
+            moves[0]++
             board[i][j] = human;
             draw();
             bestMove();
