@@ -106,9 +106,9 @@ const checkWinner = () => {
         //updateScore(winner)
     }
     let check_tie = 0;
-    for(let i=0; i<3; i++) {
-        for(let j=0; j<3; j++) {
-            if(board[i][j] == human || board[i][j] == ai) {
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (board[i][j] == human || board[i][j] == ai) {
                 check_tie++;
             }
         }
@@ -128,18 +128,18 @@ let scores = {
 
 function minimax(board, depth, isMaximizing) {
     let result = checkWinner();
-    if(result !== null) {
+    if (result !== null) {
         return scores[result];
     }
-    if(isMaximizing) {
+    if (isMaximizing) {
         let bestScore = -1 * Infinity;
-        for(let i = 0; i < 3; i++) {
-            for(let j = 0; j < 3; j++) {
-                if(board[i][j] == '') {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (board[i][j] == '') {
                     board[i][j] = ai;
                     let score = minimax(board, depth + 1, false);
                     board[i][j] = '';
-                    if(score > bestScore) {
+                    if (score > bestScore) {
                         bestScore = score;
                     }
                 }
@@ -148,13 +148,13 @@ function minimax(board, depth, isMaximizing) {
         return bestScore;
     } else {
         let bestScore = Infinity;
-        for(let i = 0; i < 3; i++) {
-            for(let j = 0; j < 3; j++) {
-                if(board[i][j] == '') {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (board[i][j] == '') {
                     board[i][j] = human;
                     let score = minimax(board, depth + 1, true);
                     board[i][j] = '';
-                    if(score < bestScore) {
+                    if (score < bestScore) {
                         bestScore = score;
                     }
                 }
@@ -167,15 +167,15 @@ function minimax(board, depth, isMaximizing) {
 function bestMove() {
     let bestScore = -1 * Infinity;
     let move;
-    for(let i = 0; i < 3; i++) {
-        for(let j = 0; j < 3; j++) { 
-            if(board[i][j] == '') {
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            if (board[i][j] == '') {
                 board[i][j] = ai;
                 let score = minimax(board, 0, false);
                 board[i][j] = '';
                 if (score > bestScore) {
                     bestScore = score;
-                    move = {i, j};
+                    move = { i, j };
                 }
             }
         }
@@ -215,19 +215,23 @@ const nextTurn = (e) => {
             moves[0]++
             board[i][j] = human;
             draw();
+            checkWinner();
+           
             bestMove();
             draw();
-            for(let k = 0; k < 3; k++) {
-                for(let l = 0; l < 3; l++) {
+            for (let k = 0; k < 3; k++) {
+                for (let l = 0; l < 3; l++) {
                     console.log(board[k][l]);
                 }
             }
+            
             checkWinner();
+        
         }
     }
 }
 
-document.querySelector('#new').addEventListener('click', function () {
+document.querySelector('#restartBtn').addEventListener('click', function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     init()
 })

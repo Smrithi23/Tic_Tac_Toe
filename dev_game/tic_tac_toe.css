@@ -15,3 +15,28 @@ body {
     background: #ffffff;
     border: 2px solid #000000;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body{
+    background: linear-gradient(-90deg, #00c9ff, #92fe9d);
+    font-family: 'Montserrat', sans-serif;
+}
+
+#restartBtn {
+    height: 10vw;
+}
+
+#robot {
+    height: 10vw;
+}
+
+#human {
+    height: 10vw;
+}
