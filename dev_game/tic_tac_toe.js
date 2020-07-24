@@ -13,7 +13,7 @@ let w = canvas.width / 3;
 // height is the height of a grid box
 let h = canvas.height / 3;
 
-let game_score = [0, 0];
+let game_score = 0;
 let moves=0;
 let winner = null;
 let ai = 'O', human = 'X';
@@ -106,15 +106,15 @@ const checkWinner = () => {
         }
     }
 
-    if (check_tie == 9) {
+    if (check_tie == 9 && !winner) {
         winner = 'tie';
     }
     return winner;
 }
 
 let scores = {
-    'X': -1,
-    'O': 1,
+    'X': 0,
+    'O': 0,
     'tie': 0
 };
 
@@ -157,6 +157,9 @@ function minimax(board, depth, isMaximizing) {
 }
 
 function bestMove() {
+    setInterval(function(){  }, 3000)
+    document.getElementById('robot-id').style.border = "10px solid #008829"
+    document.getElementById('human-id').style.border = "none"
     let bestScore = -1 * Infinity;
     let move;
     for (let i = 0; i < 3; i++) {
@@ -183,13 +186,46 @@ function bestMove() {
     }
 }
 
+const updateScore = (winner, game_score) => {
+    console.log(winner)
+    if(winner == human){
+        document.getElementById('result').style.color = 'green'
+        document.getElementById('result').innerHTML = 'YOU WIN!'
+        document.getElementById('score').innerHTML = 'Score : ' + game_score
+        document.getElementById('button-div').style.color = 'yellow'
+    } else if(winner == ai){
+        document.getElementById('result').style.color = 'red'
+        document.getElementById('result').innerHTML = 'AI WINS!'
+        document.getElementById('score').innerHTML = 'Score : 0'
+    } else {
+        document.getElementById('result').style.color = 'orange'
+        document.getElementById('result').innerHTML = 'IT\'S A TIE!'
+        document.getElementById('score').innerHTML = 'Score : 0'
+    }
+}
+
+const calcScore = (winner) => {
+    if(winner === ai){
+        scores.O ++;
+    } else if(winner === human){
+        scores.X ++;
+        game_score = (6 - moves) * 10
+    } else {
+        scores.tie ++
+    }
+    console.log(scores)
+    updateScore(winner, game_score);
+}
+
 const nextTurn = (e) => {
     if (winner != null) {
-        console.log(winner);
+        // console.log(winner);
         console.log("Game Over!!!");
         document.getElementById("screen").style.display = 'block';
         document.getElementById("card").style.display = 'block';
     } else {
+        document.getElementById('human-id').style.border = "10px solid #008829"
+        document.getElementById('robot-id').style.border = "none"
         let rect = canvas.getBoundingClientRect();
         let x = e.clientX - rect.left;
         let y = e.clientY - rect.top;
@@ -206,28 +242,32 @@ const nextTurn = (e) => {
             moves++
             board[i][j] = human;
             draw();
-            checkWinner();
+            // checkWinner();
             let result = checkWinner();
             if(result != null) {
-                console.log(winner);
+                // console.log(winner);
                 console.log("Game Over!!!");
+                calcScore(result)
                 document.getElementById("screen").style.display = 'block';
-                document.getElementById("card").style.display = 'block';    
-            }
-            bestMove();
-            draw();
-            for (let k = 0; k < 3; k++) {
-                for (let l = 0; l < 3; l++) {
-                    console.log(board[k][l]);
+                document.getElementById("card").style.display = 'block';  
+            } else {
+                bestMove();
+                draw();
+                for (let k = 0; k < 3; k++) {
+                    for (let l = 0; l < 3; l++) {
+                        // console.log(board[k][l]);
+                    }
+                }
+                result = checkWinner();
+                if(result != null) {
+                    // console.log(winner);
+                    console.log("Game Over!!!");
+                    calcScore(result)
+                    document.getElementById("screen").style.display = 'block';
+                    document.getElementById("card").style.display = 'block';    
                 }
             }
-            result = checkWinner();
-            if(result != null) {
-                console.log(winner);
-                console.log("Game Over!!!");
-                document.getElementById("screen").style.display = 'block';
-                document.getElementById("card").style.display = 'block';    
-            }
+            
         
         }
     }
