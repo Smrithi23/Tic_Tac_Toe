@@ -65,7 +65,7 @@
 			display: flex;
 			align-items: center;
 			padding: 15px 0;
-			border-bottom: 1px solid #ffe773;
+			border-bottom: 1px solid #001aff;
 		}
 
 		.lboard_wrap .lboard_mem:first-child{
@@ -130,11 +130,26 @@
 		#header {
             display: flex;
             align-items: center;
-            justify-content: flex-end;
+            justify-content: flex-start;
         }
+		#back {
+			background: #001aff;
+			border: 0;
+			color: #FFFFFF;
+            border: 2px solid #001aff;
+            font-weight: bold;
+            font-size: 1em;
+            padding: 0.5em;
+            margin: 1em;
+		}
 	</style>
 </head>
 <body>
+<div id="header">
+	<form method="get" action="/dashboard">
+		<input id="back" type="submit" value="Back">
+	</form>
+</div>
 <div class="wrapper">
 	<div class="lboard_section">
 		<div class="lboard_wrap">
@@ -151,7 +166,7 @@
 					{{#each leaderboard}}
 						<div class="lboard_mem">
 							<div class="name_bar">
-								<p><span>{{@index}}.</span>{{username}}</p>
+								<p><span></span>{{username}}</p>
 							</div>
 							<div class="points">
 								{{highscore}}

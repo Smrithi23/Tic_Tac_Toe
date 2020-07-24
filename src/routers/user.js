@@ -108,7 +108,7 @@ router.post('/updatehighscore',auth, async (req, res) => {
 //Dashboard
 router.get("/dashboard", auth, async (req, res) => {
   try {
-    res.status(200).render("dashboard");
+    res.status(200).render("dashboard", { username : req.user.username, email : req.user.email, highscore : req.user.highscore });
   } catch (e) {
     res.status(500).send();
   }

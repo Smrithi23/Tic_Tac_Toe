@@ -9,7 +9,6 @@
             margin: 0;
             height: 100vh;
             width: 100vw;
-            background: #eb9834;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -96,38 +95,105 @@
             font-weight: bold;
             text-align: center;
         }
+        #easy {
+            border: 0;
+            font-size: 1.2em;
+            background: #FFF;
+            border: none;
+            margin: 1em;
+            padding: 1em;
+            color: #001aff;
+            font-weight: bold;
+            width: 150px;
+        }
+        #difficult {
+            border: 0;
+            font-size: 1.2em;
+            background: #FFF;
+            border: 2px solid #001aff;;
+            margin: 1em;
+            padding: 1em;
+            color: #001aff;
+            font-weight: bold;
+            width: 150px;
+        }
+        #main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        #choose {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
     <div>
+        <div id="choose">
+        <button id="easy">Easy</button><br>
+        <button id="difficult">Difficult</button>
+    </div>
+    <div id="main">
+        <div>
         <div id="robot-id">
             <img id="robot" src="/public/robot.png"/>
         </div>
         <div id="human-id">
             <img id="human" src="/public/human.png"/>
         </div>
+        </div>
+        <canvas id="canvas"></canvas>
+        <canvas id="screen"></canvas>
+        <div id="card">
+            <div id="result">
+            </div>
+            <div class="text">
+                High Score : {{highscore}}
+            </div>
+            <div class="text" id="score">
+            </div>
+            <div id=button-div>
+                <form method="get" action="/game">
+                    <input id="play-again" type="submit" value="Play Again">
+                </form>
+            </div>
+        </div>
+        <a id='new'> <img id="restartBtn" src="/public/restart.png"></a>
+        </div>
     </div>
-    <canvas id="canvas"></canvas>
-    <canvas id="screen"></canvas>
-    <div id="card">
-        <div id="result">
-        </div>
-        <div class="text">
-            High Score : {{highscore}}
-        </div>
-        <div class="text" id="score">
-        </div>
-        <div id=button-div>
-            <form method="get" action="/game">
-                <input id="play-again" type="submit" value="Play Again">
-            </form>
-        </div>
-    </div>
-    <a id='new'> <img id="restartBtn" src="/public/restart.png"></a>
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
-
+        let scores = {
+            'X': -1,
+            'O': 1,
+            'tie': 0
+        };
+        document.getElementById("easy").addEventListener("click", function() {
+            document.getElementById("easy").style.border = "2px solid #001aff";
+            document.getElementById("difficult").style.border = "none";
+            scores = {
+                'X': 0,
+                'O': 0,
+                'tie': 0
+            };
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            init();
+        });
+        document.getElementById("difficult").addEventListener("click", function() {
+            document.getElementById("easy").style.border = "none";
+            document.getElementById("difficult").style.border = "2px solid #001aff";
+            scores = {
+                'X': -1,
+                'O': 1,
+                'tie': 0
+            };
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            init();
+        });
         let board = [
             ['', '', ''],
             ['', '', ''],
@@ -230,12 +296,6 @@
             }
             return winner;
         }
-
-        let scores = {
-            'X': -1,
-            'O': 1,
-            'tie': 0
-        };
 
         function minimax(board, depth, isMaximizing) {
             let result = checkWinner();
