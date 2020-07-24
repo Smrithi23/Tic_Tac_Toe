@@ -14,7 +14,7 @@ let w = canvas.width / 3;
 let h = canvas.height / 3;
 
 let game_score = [0, 0];
-let moves = [0, 0];
+let moves=0;
 let winner = null;
 let ai = 'O', human = 'X';
 
@@ -79,8 +79,6 @@ const checkWinner = () => {
     for (let i = 0; i < 3; i++) {
         if (board[i][0] === board[i][1] && board[i][1] === board[i][2] && board[i][0] != '') {
             winner = board[i][0];
-            // console.log('Winner is ', winner);
-            //updateScore(winner)
         }
     }
 
@@ -88,22 +86,16 @@ const checkWinner = () => {
     for (let i = 0; i < 3; i++) {
         if (board[0][i] === board[1][i] && board[1][i] === board[2][i] && board[0][i] != '') {
             winner = board[0][i];
-            // console.log('Winner is ', winner);
-            //updateScore(winner)
         }
     }
 
     // diagonal
     if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[0][0] != '') {
         winner = board[0][0];
-        // console.log('Winner is ', winner);
-        //updateScore(winner)
     }
 
     if (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[0][2] != '') {
         winner = board[0][2];
-        // console.log('Winner is ', winner);
-        //updateScore(winner)
     }
     let check_tie = 0;
     for (let i = 0; i < 3; i++) {
@@ -195,16 +187,15 @@ const nextTurn = (e) => {
     if (winner != null) {
         console.log(winner);
         console.log("Game Over!!!");
+        document.getElementById("screen").style.display = 'block';
+        document.getElementById("card").style.display = 'block';
     } else {
         let rect = canvas.getBoundingClientRect();
         let x = e.clientX - rect.left;
         let y = e.clientY - rect.top;
         let i = Math.floor(x / ((rect.right - rect.left) / 3));
         let j = Math.floor(y / ((rect.right - rect.left) / 3));
-        // console.log(i, j);
-
         let indx = 0
-
         available.forEach((e) => {
             if (e[0] === i && e[1] === j) {
                 indx = parseInt(available.indexOf(e))
@@ -212,11 +203,17 @@ const nextTurn = (e) => {
         })
         if (vacant[indx] === 0) {
             vacant[indx] = 1
-            moves[0]++
+            moves++
             board[i][j] = human;
             draw();
             checkWinner();
-           
+            let result = checkWinner();
+            if(result != null) {
+                console.log(winner);
+                console.log("Game Over!!!");
+                document.getElementById("screen").style.display = 'block';
+                document.getElementById("card").style.display = 'block';    
+            }
             bestMove();
             draw();
             for (let k = 0; k < 3; k++) {
@@ -224,8 +221,13 @@ const nextTurn = (e) => {
                     console.log(board[k][l]);
                 }
             }
-            
-            checkWinner();
+            result = checkWinner();
+            if(result != null) {
+                console.log(winner);
+                console.log("Game Over!!!");
+                document.getElementById("screen").style.display = 'block';
+                document.getElementById("card").style.display = 'block';    
+            }
         
         }
     }
@@ -245,7 +247,7 @@ const init = () => {
     ];
     vacant = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     drawCtx()
-    moves = [0, 0]
+    moves = 0
     winner = null;
     document.querySelector('canvas').addEventListener('click', function (e) {
         nextTurn(e);
