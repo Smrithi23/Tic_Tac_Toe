@@ -2,6 +2,7 @@
 
 AI based project on Tic Tac Toe for Engage 2020.
 Minimax algorithm is implemented in JavaScript to determine the best move.
+The name of our team is Tricky Tac Toe. 
 
 # Setting up
 
