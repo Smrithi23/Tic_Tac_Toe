@@ -67,7 +67,7 @@ router.post("/", async (req, res) => {
 router.post('/logout', auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
-      return token.token !== req.token;
+    return token.token !== req.token;
     })
     await req.user.save()
     res.status(201).render('login');
@@ -89,13 +89,13 @@ router.get("/leaderboard", auth, async (req, res) => {
 
 
 //update highscore
-router.patch('/updatehighscore',auth, async (req, res) => {
+router.post('/updatehighscore',auth, async (req, res) => {
   try {
     const score = req.body.score
     if (score > req.user.highscore) {
       req.user.highscore = score
       req.user.save()
-       res.status(200).send(req.user)
+      res.status(200).send(req.user)
     } else {
       res.status(200).send(req.user)
     }
@@ -116,7 +116,9 @@ router.get("/dashboard", auth, async (req, res) => {
 
 router.get("/game", auth, async(req, res) => {
   try {
-    res.status(200).render("game");
+    const user = await User.findOne({username : req.user.username}, { username: 1, highscore: 1, _id: 0 });
+    console.log(user.highscore);
+    res.status(200).render("game", {highscore : user.highscore});
   } catch (e) {
     res.status(500).send();
   }
