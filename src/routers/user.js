@@ -70,7 +70,7 @@ router.post('/logout', auth, async (req, res) => {
     return token.token !== req.token;
     })
     await req.user.save()
-    res.status(201).render('login');
+    res.status(201).redirect('/');
   } catch (e) {
     res.status(500).send(e);
   }

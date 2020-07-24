@@ -110,7 +110,7 @@
             border: 0;
             font-size: 1.2em;
             background: #FFF;
-            border: 2px solid #001aff;;
+            border: 2px solid #001aff;
             margin: 1em;
             padding: 1em;
             color: #001aff;
@@ -128,13 +128,25 @@
             align-items: center;
             justify-content: center;
         }
+        #tic-tac-toe {
+            color: #001aff;
+            font-weight: bold;
+            font-size: 3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2em;
+        }
     </style>
 </head>
 <body>
     <div>
+        <div id="tic-tac-toe">
+            TIC TAC TOE
+        </div>
         <div id="choose">
         <button id="easy">Easy</button><br>
-        <button id="difficult">Difficult</button>
+        <button id="difficult">Hard</button>
     </div>
     <div id="main">
         <div>
@@ -146,7 +158,10 @@
         </div>
         </div>
         <canvas id="canvas"></canvas>
-        <canvas id="screen"></canvas>
+        <a id='new'> <img id="restartBtn" src="/public/restart.png"></a>
+        </div>
+    </div>
+    <canvas id="screen"></canvas>
         <div id="card">
             <div id="result">
             </div>
@@ -161,9 +176,6 @@
                 </form>
             </div>
         </div>
-        <a id='new'> <img id="restartBtn" src="/public/restart.png"></a>
-        </div>
-    </div>
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");

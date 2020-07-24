@@ -108,7 +108,6 @@
 			width: 100%;
 			height: 5px;
 			background: #d5b000;
-			margin-top: 5px;
 			border-radius: 5px;
 			position: relative;
 			overflow: hidden;
@@ -140,15 +139,32 @@
             font-weight: bold;
             font-size: 1em;
             padding: 0.5em;
-            margin: 1em;
+            margin: 0.5em;
+			display: flex;
+            align-items: center;
+            justify-content: center;
 		}
+		#tic-tac-toe {
+            color: #001aff;
+            font-weight: bold;
+            font-size: 3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 	</style>
 </head>
 <body>
-<div id="header">
+<div>
 	<form method="get" action="/dashboard">
 		<input id="back" type="submit" value="Back">
 	</form>
+	<div id="tic-tac-toe">
+		TIC TAC TOE
+	</div>
+</div>
+<div id="header">
+	
 </div>
 <div class="wrapper">
 	<div class="lboard_section">
