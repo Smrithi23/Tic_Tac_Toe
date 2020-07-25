@@ -60,7 +60,7 @@ router.post("/", async (req, res) => {
     res.status(200).render('dashboard', { username : user["username"], email : user["email"], highscore : user["highscore"] });
   } catch (e) {
     const loginerror = "Incorrect email or password"
-    res.status(400).redirect('login', { loginerror })
+    res.status(400).redirect('/', { loginerror })
   }
 });
 
