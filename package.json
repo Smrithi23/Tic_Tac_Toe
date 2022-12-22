@@ -16,7 +16,7 @@
     "cookies": "^0.8.0",
     "express": "^4.17.1",
     "hbs": "^4.1.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^3.1.10",
     "mongoose": "^5.9.21",
     "validator": "^10.9.0"
